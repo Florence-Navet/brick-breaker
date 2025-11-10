@@ -7,13 +7,17 @@ Second year IT Bachelor group project  : create a brick breaker game with C++ an
 - Docker
 
 ## Installs
-If you're on windows, you'll need a software to get the GUI working. On linux X server does the job, on linux you can either download and install `VcXsrv` or `Xming`. For this project, we'll be using `VcXsrv` on windows
+If you're on windows, you'll need a software to get the GUI working. On linux X server does the job, on Windows you can either download and install `VcXsrv` or `Xming`. For this project, we'll be using `VcXsrv` on windows
+
+## On Linux
+I'll take care of instruction for linux later.
 
 ## On Windows
 ## 1. Install VcXsrv
 ### 1.1 Download VcXsrv from [https://vcxsrv.com/](https://vcxsrv.com/) or [https://github.com/marchaesen/vcxsrv](https://github.com/marchaesen/vcxsrv)
 Download `vcxsrv-64.21.1.16.1.installer.exe`
 Typical installation is fine (all components checked).
+
 ### 1.2 Configure and start VcXsrv
 - Open XLaunch (installed with VcXsrv).
 - Choose **“Multiple windows”** (so each SFML window appears separately).
@@ -26,6 +30,7 @@ Leave the rest as default.
 Finish and start the server. You should see an X icon in your system tray.
 
 If needed, you can use `config.xlaunch` where all config were saved.
+
 ### 1.3 Add environment configuration to docker-compose.yml
 ```
 - DISPLAY=host.docker.internal:0
@@ -50,16 +55,10 @@ if image already build:
 docker compose up
 ```
 
-## 4. Sanity checks
+## 4. Start project
+⚠️ Before starting project, execute `config.xlaunch` or start `XLaunch` service : without it you won't be able to forward SMFL from container to host.
 ```bash
-docker compose exec dev bash
-```
-
-## 5. Start project
-```bash
-# docker compose exec dev bash -c "cmake -S . -B build && cmake --build build && ./build/sfml-test"
-docker compose exec dev bash -c "rm -rf build && cmake -S . -B build && cmake --build build && ./build/sfml-test"
-
+docker compose exec dev bash -c "cmake -S . -B build && cmake --build build && ./build/sfml-test"
 ```
 replace ./build/sfml-test to the name of your executable (cf CMakeLists.txt last line add_executable)
 
