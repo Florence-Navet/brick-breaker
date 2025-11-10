@@ -1,0 +1,31 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Mount project files into the container
+    volumes:
+      - type: bind
+        source : ./CMakeLists.txt
+        target: /app/CMakeLists.txt
+      - type: bind
+        source: ./build/
+        target: /build/
+      - type: bind
+        source: ./src
+        target: /app/src
+      - type: bind
+        source: ./build
+        target: /app/build
+
+      # Share Windows X11 socket with container
+      - type: bind
+        source: /tmp/.X11-unix
+        target: /tmp/.X11-unix
+
+    # Environment variables for X11 forwarding
+    environment:
+      - DISPLAY=host.docker.internal:0
+      - LIBGL_ALWAYS_INDIRECT=1
+    tty: true
+    stdin_open: true
