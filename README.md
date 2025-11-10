@@ -55,6 +55,11 @@ if image already build:
 docker compose up
 ```
 
+If you wanna check which version of SFML you're using :
+```bash
+docker compose exec dev bash -c "dpkg -l | grep libsfml"
+```
+
 ## 4. Start project
 ⚠️ Before starting project, execute `config.xlaunch` or start `XLaunch` service : without it you won't be able to forward SMFL from container to host.
 ```bash
