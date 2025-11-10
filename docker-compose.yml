@@ -25,8 +25,9 @@ services:
 
     # Environment variables for X11 forwarding
     environment:
-      - DISPLAY=host.docker.internal:0
-      - LIBGL_ALWAYS_INDIRECT=1
+      DISPLAY: host.docker.internal:0
+      LIBGL_ALWAYS_INDIRECT: 1
+
     command: bash -c "cmake -S . -B build && cmake --build build && ./build/${MAIN_FILE_NAME}"
     tty: true
     stdin_open: true

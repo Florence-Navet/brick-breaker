@@ -58,6 +58,12 @@ docker compose up
 ## 4. Start project
 ⚠️ Before starting project, execute `config.xlaunch` or start `XLaunch` service : without it you won't be able to forward SMFL from container to host.
 ```bash
+docker compose up
+```
+`docker-compose.yml` already set the following command `bash -ic "cmake -S . -B build && cmake --build build && ./build/$MAIN_FILE_NAME"` , this command will build and run the project. You can change the file name in the docker-compose
+
+Do it manually (if the container is already running)
+```bash
 docker compose exec dev bash -c "cmake -S . -B build && cmake --build build && ./build/sfml-test"
 ```
 replace ./build/sfml-test to the name of your executable (cf CMakeLists.txt last line add_executable)
