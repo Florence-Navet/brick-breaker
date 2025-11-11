@@ -39,3 +39,9 @@ float Balle::getRayon() const
 {
     return forme.getRadius();
 }
+
+
+void Balle::inverserVitesseY()
+{
+    vitesse.y = -vitesse.y;
+}

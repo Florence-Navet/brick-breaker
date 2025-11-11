@@ -16,9 +16,12 @@ public:
 
     void update();
     void draw(sf::RenderWindow& window);
+    void inverserVitesseY(); 
 
     sf::Vector2f getPosition() const;
     float getRayon() const;
+
+
 };
 
 #endif

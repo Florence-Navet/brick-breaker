@@ -1,5 +1,6 @@
 #include "main.hpp"
 #include "Balle.hpp"
+#include "Raquette.hpp"
 
 
 
@@ -13,6 +14,8 @@ int main()
   window.setFramerateLimit(60); // FPS
 
   Balle balle(10.f, largeur, hauteur);
+  Raquette raquette(largeur, hauteur);
+
 
   while (window.isOpen())
   {
@@ -25,9 +28,24 @@ int main()
     }
 
     balle.update();
+    raquette.update();
+
+    //collisition balle/ raquette
+
+    if (balle.getPosition().y + balle.getRayon() * 2 >= raquette.getGlobalBounds().top && 
+    balle.getPosition().x + balle.getRayon() >= raquette.getGlobalBounds().left &&
+  balle.getPosition().x >= raquette.getGlobalBounds().left + raquette.getGlobalBounds().width)
+
+  {
+balle.inverserVitesseY();
+
+  }
+
+
 
     window.clear(sf::Color(0,98,255)); // fond bleu
     balle.draw(window);
+    raquette.draw(window);
     window.display();
     
     
