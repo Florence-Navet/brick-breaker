@@ -1,11 +1,18 @@
 #include "main.hpp"
+#include "Balle.hpp"
 
 
 
 int main()
  {
-  sf::RenderWindow window(sf::VideoMode(800, 600), "Casse-Brique SFML");
+
+  const float largeur = 800.f;
+  const float hauteur = 600.f;
+
+  sf::RenderWindow window(sf::VideoMode(largeur, hauteur), "Casse-Brique SFML");
   window.setFramerateLimit(60); // FPS
+
+  Balle balle(10.f, largeur, hauteur);
 
   while (window.isOpen())
   {
@@ -17,7 +24,10 @@ int main()
       window.close();
     }
 
+    balle.update();
+
     window.clear(sf::Color(0,98,255)); // fond bleu
+    balle.draw(window);
     window.display();
     
     
