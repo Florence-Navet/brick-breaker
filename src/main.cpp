@@ -1,3 +1,4 @@
+// main.cpp
 #include "main.hpp"
 #include "Balle.hpp"
 #include "Raquette.hpp"
@@ -7,42 +8,35 @@ int main()
     const float largeur = 800.f;
     const float hauteur = 600.f;
 
-    sf::RenderWindow window(sf::VideoMode(largeur, hauteur), "Casse-Brique SFML");
-    window.setFramerateLimit(60); // FPS
+    sf::RenderWindow fenetre(sf::VideoMode(largeur, hauteur), "Casse-Brique SFML");
+    fenetre.setFramerateLimit(60);
 
     Balle balle(10.f, largeur, hauteur);
     Raquette raquette(largeur, hauteur);
 
-    // balle.lancer(); 
-
-    while (window.isOpen())
+    while (fenetre.isOpen())
     {
-        sf::Event event;
+        sf::Event evenement;
 
-        while (window.pollEvent(event))
+        while (fenetre.pollEvent(evenement))
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            if (evenement.type == sf::Event::Closed)
+                fenetre.close();
         }
 
-        // raquette.update();
-        // balle.update(raquette.getGlobalBounds());
+        float anciennePositionX = raquette.obtenirLimitesGlobales().left;
+        raquette.mettreAJour();
+        float nouvellePositionX = raquette.obtenirLimitesGlobales().left;
 
-        // TEST MVT RAQUETTE BALLE
-        float ancienneX= raquette.getGlobalBounds().left;
-        raquette.update();
-        float nouvelleX = raquette.getGlobalBounds().left;
-
-         if (!balle.estEnMouvement() && nouvelleX != ancienneX)
+        if (!balle.estEnMouvement() && nouvellePositionX != anciennePositionX)
             balle.lancer();
 
-        // Mise à jour de la balle (avec détection de collisions)
-        balle.update(raquette.getGlobalBounds());
+        balle.mettreAJour(raquette.obtenirLimitesGlobales());
 
-        window.clear(sf::Color(0, 98, 255)); // fond bleu
-        balle.draw(window);
-        raquette.draw(window);
-        window.display();
+        fenetre.clear(sf::Color(0, 98, 255));
+        balle.dessiner(fenetre);
+        raquette.dessiner(fenetre);
+        fenetre.display();
     }
 
     return 0;

@@ -1,43 +1,38 @@
+// Raquette.cpp
 #include "Raquette.hpp"
 
-Raquette::Raquette(float largeur, float hauteur) 
+Raquette::Raquette(float largeur, float hauteur)
 {
-        float raquetteLargeur = 100.f;
-        float raquetteHauteur = 20.f;
+    float largeurRaquette = 100.f;
+    float hauteurRaquette = 20.f;
 
-        forme.setSize(sf::Vector2f(raquetteLargeur, raquetteHauteur));
-        forme.setFillColor(sf::Color::White);
+    forme.setSize(sf::Vector2f(largeurRaquette, hauteurRaquette));
+    forme.setFillColor(sf::Color::White);
+    forme.setPosition((largeur - largeurRaquette) / 2.f, hauteur - 50.f);
 
-
-        //Position de la raquette centrée en bas de la fenêtre
-        forme.setPosition((largeur - raquetteLargeur) / 2.f, hauteur - 50.f);
-
-        vitesse = 8.f;
-        fenetreLargeur = largeur;
+    vitesse = 8.f;
+    largeurFenetre = largeur;
 }
 
-void Raquette::update()
+void Raquette::mettreAJour()
 {
-        // deplacement avec fleches
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-                forme.move(-vitesse, 0.f);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-                forme.move(vitesse, 0.f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        forme.move(-vitesse, 0.f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        forme.move(vitesse, 0.f);
 
-        //empeche de sortir de l'écran
-        if(forme.getPosition().x < 0)
-                forme.setPosition(0, forme.getPosition().y);
-        if(forme.getPosition().x + forme.getSize().x > fenetreLargeur)
-                forme.setPosition(fenetreLargeur - forme.getSize().x, forme.getPosition().y);
+    if (forme.getPosition().x < 0)
+        forme.setPosition(0, forme.getPosition().y);
+    if (forme.getPosition().x + forme.getSize().x > largeurFenetre)
+        forme.setPosition(largeurFenetre - forme.getSize().x, forme.getPosition().y);
 }
 
-void Raquette::draw(sf::RenderWindow& window)
+void Raquette::dessiner(sf::RenderWindow& fenetre)
 {
-    window.draw(forme);
+    fenetre.draw(forme);
 }
 
-sf::FloatRect Raquette::getGlobalBounds() const
+sf::FloatRect Raquette::obtenirLimitesGlobales() const
 {
     return forme.getGlobalBounds();
 }
-

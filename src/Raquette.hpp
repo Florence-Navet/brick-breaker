@@ -1,3 +1,4 @@
+// Raquette.hpp
 #ifndef RAQUETTE_HPP
 #define RAQUETTE_HPP
 
@@ -5,22 +6,18 @@
 
 class Raquette
 {
-        private:
-                sf::RectangleShape forme;
-                float vitesse;
-                float fenetreLargeur;
+private:
+    sf::RectangleShape forme;
+    float vitesse;
+    float largeurFenetre;
 
-        public:
-                Raquette(float largeur, float hauteur);
+public:
+    Raquette(float largeur, float hauteur);
 
-                void update();
-                void draw(sf::RenderWindow& window);
+    void mettreAJour();
+    void dessiner(sf::RenderWindow& fenetre);
 
-                sf::FloatRect getGlobalBounds() const;
-
-
-
+    sf::FloatRect obtenirLimitesGlobales() const;
 };
-
 
 #endif
