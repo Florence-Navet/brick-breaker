@@ -11,8 +11,8 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 # Add executable from source files
 add_executable(sfml-test 
     src/main.cpp
-    src/Balle.cpp
-    src/Raquette.cpp)
+    src/Ball.cpp
+    src/Paddle.cpp)
 
 cmake_minimum_required(VERSION 3.10)
 

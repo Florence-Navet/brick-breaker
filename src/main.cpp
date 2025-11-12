@@ -1,43 +1,40 @@
 // main.cpp
 #include "main.hpp"
-#include "Balle.hpp"
-#include "Raquette.hpp"
 
-int main()
-{
-    const float largeur = 800.f;
-    const float hauteur = 600.f;
+#include "ball.hpp"
+#include "paddle.hpp"
 
-    sf::RenderWindow fenetre(sf::VideoMode(largeur, hauteur), "Casse-Brique SFML");
-    fenetre.setFramerateLimit(60);
+int main() {
+  const float width = 800.f;
+  const float height = 600.f;
 
-    Balle balle(10.f, largeur, hauteur);
-    Raquette raquette(largeur, hauteur);
+  sf::RenderWindow window(sf::VideoMode(width, height), "Casse-Brique SFML");
+  window.setFramerateLimit(60);
 
-    while (fenetre.isOpen())
-    {
-        sf::Event evenement;
+  Ball ball(10.f, width, height);
+  Paddle raquette(width, height);
 
-        while (fenetre.pollEvent(evenement))
-        {
-            if (evenement.type == sf::Event::Closed)
-                fenetre.close();
-        }
+  while (window.isOpen()) {
+    sf::Event evenement;
 
-        float anciennePositionX = raquette.obtenirLimitesGlobales().left;
-        raquette.mettreAJour();
-        float nouvellePositionX = raquette.obtenirLimitesGlobales().left;
-
-        if (!balle.estEnMouvement() && nouvellePositionX != anciennePositionX)
-            balle.lancer();
-
-        balle.mettreAJour(raquette.obtenirLimitesGlobales());
-
-        fenetre.clear(sf::Color(0, 98, 255));
-        balle.dessiner(fenetre);
-        raquette.dessiner(fenetre);
-        fenetre.display();
+    while (window.pollEvent(evenement)) {
+      if (evenement.type == sf::Event::Closed) window.close();
     }
 
-    return 0;
+    float anciennePositionX = raquette.getGlobalBounds().left;
+    raquette.update();
+    float nouvellePositionX = raquette.getGlobalBounds().left;
+
+    if (!ball.getIsMoving() && nouvellePositionX != anciennePositionX)
+      ball.launch();
+
+    ball.update(raquette.getGlobalBounds());
+
+    window.clear(sf::Color(0, 98, 255));
+    ball.draw(window);
+    raquette.draw(window);
+    window.display();
+  }
+
+  return 0;
 }
