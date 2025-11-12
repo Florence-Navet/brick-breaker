@@ -6,6 +6,7 @@ Ball::Ball(float radius, float width, float height)
   shape.setRadius(radius);
   shape.setFillColor(sf::Color::Red);
   shape.setPosition(width / 2.f, height - 80.f);
+  // speed = sf::Vector2f(4.f, -4.f);
   speed = sf::Vector2f(4.f, -4.f);
 }
 
@@ -28,12 +29,18 @@ void Ball::update(const sf::FloatRect& paddleArea) {
   }
 
   shape.move(speed);
-  sf::Vector2f position = shape.getPosition();
+  // J AI CHANGE UN TRUC
+  sf::Vector2f position = this->getPosition();
 
-  if (position.x <= 0 || position.x + shape.getRadius() * 2 >= windowWidth)
-    speed.x = -speed.x;
+  if (position.x <= 0 || position.x + shape.getRadius() * 2 >= windowWidth) {
+    this->reverseXSpeed();
+  }
+  // speed.x = -speed.x;
 
-  if (position.y <= 0) speed.y = -speed.y;
+  // J AI CHANGE UN AUTRE TRUC
+  if (position.y <= 0) {
+    this->reverseYSpeed();
+  }
 
   if (shape.getGlobalBounds().intersects(paddleArea))
     speed.y = -std::abs(speed.y);
@@ -47,4 +54,17 @@ float Ball::getRadius() const { return shape.getRadius(); }
 
 bool Ball::getIsMoving() const { return isMoving; }
 
+sf::CircleShape& Ball::getShape() { return this->shape; }
+
+sf::Vector2f Ball::getPosition() { return shape.getPosition(); }
+
+sf::Vector2f Ball::getSpeed() { return this->speed; }
+
+void Ball::setSpeed(float speedX, float speedY) {
+  this->speed.x = speedX;
+  this->speed.y = speedY;
+}
+
 void Ball::reverseYSpeed() { speed.y = -speed.y; }
+
+void Ball::reverseXSpeed() { speed.x = -speed.x; }
