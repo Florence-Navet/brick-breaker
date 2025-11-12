@@ -11,8 +11,9 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 # Add executable from source files
 add_executable(sfml-test 
     src/main.cpp
-    src/Ball.cpp
-    src/Paddle.cpp)
+    src/ball.cpp
+    src/paddle.cpp
+    src/brick.cpp)
 
 
 add_executable(olivier-test 

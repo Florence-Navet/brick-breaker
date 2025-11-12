@@ -1,7 +1,10 @@
 // main.cpp
+// #include <array>
+
 #include "main.hpp"
 
 #include "ball.hpp"
+#include "brick.hpp"
 #include "paddle.hpp"
 
 int main() {
@@ -12,7 +15,9 @@ int main() {
   window.setFramerateLimit(60);
 
   Ball ball(10.f, width, height);
-  Paddle raquette(width, height);
+  Paddle paddle(width, height);
+  std::array<float, 2> brickPosition{100.f, 100.f};
+  Brick brick(100.f, 50.f, brickPosition);
 
   while (window.isOpen()) {
     sf::Event evenement;
@@ -21,18 +26,19 @@ int main() {
       if (evenement.type == sf::Event::Closed) window.close();
     }
 
-    float anciennePositionX = raquette.getGlobalBounds().left;
-    raquette.update();
-    float nouvellePositionX = raquette.getGlobalBounds().left;
+    float anciennePositionX = paddle.getGlobalBounds().left;
+    paddle.update();
+    float nouvellePositionX = paddle.getGlobalBounds().left;
 
     if (!ball.getIsMoving() && nouvellePositionX != anciennePositionX)
       ball.launch();
 
-    ball.update(raquette.getGlobalBounds());
+    ball.update(paddle.getGlobalBounds());
 
     window.clear(sf::Color(0, 98, 255));
     ball.draw(window);
-    raquette.draw(window);
+    paddle.draw(window);
+    brick.draw(window);
     window.display();
   }
 
