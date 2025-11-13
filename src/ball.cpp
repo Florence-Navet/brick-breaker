@@ -6,8 +6,8 @@ Ball::Ball(float radius, float width, float height)
   shape.setRadius(radius);
   shape.setFillColor(sf::Color::Red);
   shape.setPosition(width / 2.f, height - 80.f);
-  // speed = sf::Vector2f(4.f, -4.f);
   speed = sf::Vector2f(4.f, -4.f);
+  // speed = sf::Vector2f(6.f, -6.f);
 }
 
 void Ball::resetOnPaddle(const sf::Vector2f& paddlePosition,

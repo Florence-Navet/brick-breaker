@@ -10,6 +10,7 @@ Paddle::Paddle(float width, float height) {
   shape.setPosition((width - paddleWidth) / 2.f, height - 50.f);
 
   speed = 8.f;
+  // speed = 12.f;
   windowWidth = width;
 }
 

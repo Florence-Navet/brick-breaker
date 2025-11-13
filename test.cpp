@@ -3,13 +3,13 @@
 
 #include "main.hpp"
 
-#include <memory>
 #include <vector>
 
 #include "ball.hpp"
 #include "brick.hpp"
 #include "brickFactory.hpp"
 #include "paddle.hpp"
+#include <memory>
 
 int main() {
   const float width = 800.f;
@@ -22,8 +22,7 @@ int main() {
   Ball ball(10.f, width, height);
   Paddle paddle(width, height);
 
-  std::vector<std::unique_ptr<Brick>> bricks =
-      BrickFactory::createBricksUnique(width);
+  std::vector<std::shared_ptr<Brick>> bricks = BrickFactory::createBricksShared(width);
 
   // float brickPosition[2]{525.f, 25.f};
   // float brickPosition1[2]{10.f, 50.f};
@@ -44,10 +43,6 @@ int main() {
   sf::Clock cleanupClock;             // démarre automatiquement
   const float cleanupInterval = 2.f;  // toutes les 2 secondes
 
-  for (std::unique_ptr<Brick>& brick : bricks) {
-    brick->draw(window);
-  }
-
   while (window.isOpen()) {
     sf::Event evenement;
 
@@ -63,52 +58,23 @@ int main() {
 
     ball.update(paddle.getGlobalBounds());
 
-    // window.clear(sf::Color(200, 200, 200));
     // CLEAN UP
-    bricks.erase(std::remove_if(bricks.begin(), bricks.end(),
-                                [](std::unique_ptr<Brick>& b) {
-                                  return b->isDestroyed();
-                                }),
-                 bricks.end());
     if (cleanupClock.getElapsedTime().asSeconds() >= cleanupInterval) {
-      // Ici on pourra mettre avec les vectors, je sais pas quoi
-      // Exemple :
-      // (std::shared_ptr<Brick>& b) { return b->isDestroyed(); }
-
       std::cout << "ça nettoie en principe" << std::endl;
 
       cleanupClock.restart();
     }
 
-    window.clear(sf::Color(200, 200, 200));
-
-    for (std::unique_ptr<Brick>& brick : bricks) {
+    for (std::shared_ptr<Brick>& brick : bricks) {
       if (!brick->isDestroyed()) {
-        if (brick->changeState) {
-          brick->draw(window);
-          // brick->changeState = false;
-        }
+        brick->draw(window);
         brick->collision(ball);
-        // std::cout << "vector lenght : " << bricks.size() << std::endl;
       }
     }
 
-    // window.clear(sf::Color(0, 98, 255));
+    window.clear(sf::Color(200, 200, 200));
     ball.draw(window);
     paddle.draw(window);
-
-    // if (!brick.isDestroyed()) {
-    //   brick.draw(window);
-    //   brick.collision(ball);
-    // }
-    // if (!brick2.isDestroyed()) {
-    //   brick2.draw(window);
-    //   brick2.collision(ball);
-    // }
-    // if (!brick3.isDestroyed()) {
-    //   brick3.draw(window);
-    //   brick3.collision(ball);
-    // }
 
     window.display();
   }

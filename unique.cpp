@@ -61,8 +61,6 @@ void Brick::setColor() {
 void Brick::draw(sf::RenderWindow& window) { window.draw(shape); }
 
 void Brick::collision(Ball& ball) {
-  // sf:CircleShape = ball.getShape();
-
   sf::FloatRect brickBounds = shape.getGlobalBounds();
   sf::Vector2f ballPos = ball.getPosition();
   sf::Vector2f ballSpeed = ball.getSpeed();
@@ -75,48 +73,11 @@ void Brick::collision(Ball& ball) {
                               brickBounds.left + brickBounds.width);
   float closestY = std::clamp(ballPos.y, brickBounds.top,
                               brickBounds.top + brickBounds.height);
-  // ball en bas à droite du rectangle
-  //  ballPos.x = 240, closestX = 200
-  //  ballPos.y = 160, closestX = 150
-  //  dx = 240 - 200 = 40
-  //  dy = 160 - 150 = 10
-  //  distanceSquared = 40*40 + 10*10 = 1600 + 100 = 1700
-
-  // ball en haut à droite du rectangle
-  // ballPos.x = 240, closestX = 200
-  // ballPos.y = 90, closestX = 100
-  // dx = 240 - 200 = 40
-  // dy = 90 - 100 = -10
-  // distanceSquared = 40*40 + -10*-10 = 1600 + 100 = 1700
-
-  // ball en haut à gauche du rectangle
-  // ballPos.x = 90, closestX = 100
-  // ballPos.y = 90, closestX = 100
-  // dx = 90 - 100 = -10
-  // dy = 90 - 100 = -10
-  // distanceSquared = -10*-10 + -10*-10 = 100 + 100 = 200
-
-  // ball en bas à gauche du rectangle
-  // ballPos.x = 90, closestX = 100
-  // ballPos.y = 160, closestX = 150
-  // dx = 90 - 100 = -10
-  // dy = 160 - 150 = 10
-  // distanceSquared = -10*-10 + -10*-10 = 100 + 100 = 200
-
-  // ball sur le rectangle (bas guahce)
-  // ballPos.x = 101, closestX = 101
-  // ballPos.y = 149, closestX = 149
-  // dx = 101 - 101 = 0
-  // dy = 149 - 149 = 0
-  // distanceSquared = 0*0 + 0*0 = 0
-
+  
   float dx = ballPos.x - closestX;
   float dy = ballPos.y - closestY;
   float distanceSquared = dx * dx + dy * dy;
 
-  // 1700 < ( 10*10 = 100 )
-  // 200 < ( 100 )
-  // 0 < 100
   if (distanceSquared < (ballRadius * ballRadius)) {
     if (ballPos.x < brickBounds.left ||
         ballPos.x > brickBounds.left + brickBounds.width) {
@@ -126,7 +87,6 @@ void Brick::collision(Ball& ball) {
         ballPos.y > brickBounds.top + brickBounds.height) {
       ball.reverseYSpeed();
     }
-    // originDurability--;
     durability--;
     this->setColor();
     changeState = true;
@@ -140,4 +100,85 @@ float Brick::getHeight() { return this->brickHeight; }
 
 void Brick::setPosition(float posX, float posY) {
   shape.setPosition(posX, posY);
+}
+
+#include "main.hpp"
+
+#include <memory>
+#include <vector>
+
+#include "ball.hpp"
+#include "brick.hpp"
+#include "brickFactory.hpp"
+#include "paddle.hpp"
+
+int main() {
+  const float width = 800.f;
+  const float height = 600.f;
+
+  sf::RenderWindow window(sf::VideoMode(width, height), "Casse-Brique SFML");
+  window.setFramerateLimit(60);
+  window.setVerticalSyncEnabled(true);
+
+  Ball ball(10.f, width, height);
+  Paddle paddle(width, height);
+
+  std::vector<std::unique_ptr<Brick>> bricks =
+      BrickFactory::createBricksUnique(width);
+
+
+  // CLEAN UP
+  sf::Clock cleanupClock;             // démarre automatiquement
+  const float cleanupInterval = 2.f;  // toutes les 2 secondes
+
+  for (std::unique_ptr<Brick>& brick : bricks) {
+    brick->draw(window);
+  }
+
+  while (window.isOpen()) {
+    sf::Event evenement;
+
+    while (window.pollEvent(evenement)) {
+      if (evenement.type == sf::Event::Closed) window.close();
+    }
+
+    float previousPositionX = paddle.getGlobalBounds().left;
+    paddle.update();
+    float newPositionX = paddle.getGlobalBounds().left;
+
+    if (!ball.getIsMoving() && newPositionX != previousPositionX) ball.launch();
+
+    ball.update(paddle.getGlobalBounds());
+
+    bricks.erase(std::remove_if(bricks.begin(), bricks.end(),
+                                [](std::unique_ptr<Brick>& b) {
+                                  return b->isDestroyed();
+                                }),
+                 bricks.end());
+
+    if (cleanupClock.getElapsedTime().asSeconds() >= cleanupInterval) {
+
+      std::cout << "ça nettoie en principe" << std::endl;
+
+      cleanupClock.restart();
+    }
+
+    window.clear(sf::Color(200, 200, 200));
+
+    for (std::unique_ptr<Brick>& brick : bricks) {
+      if (!brick->isDestroyed()) {
+        if (brick->changeState) {
+          brick->draw(window);
+        }
+        brick->collision(ball);
+      }
+    }
+
+    ball.draw(window);
+    paddle.draw(window);
+
+    window.display();
+  }
+
+  return 0;
 }

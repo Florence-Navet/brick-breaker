@@ -13,7 +13,8 @@ add_executable(sfml-test
     src/main.cpp
     src/ball.cpp
     src/paddle.cpp
-    src/brick.cpp)
+    src/brick.cpp
+    src/brickFactory.cpp)
 
 
 add_executable(olivier-test 
