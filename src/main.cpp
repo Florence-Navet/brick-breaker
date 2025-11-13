@@ -10,6 +10,8 @@
 #include "gameManager.hpp"
 #include "colors.hpp"
 #include "values.hpp"
+#include "music.hpp"
+
 
 int main() {
   const float width{Values::WINDOW_WIDTH};
@@ -21,8 +23,25 @@ int main() {
   window.setFramerateLimit(60);
   window.setVerticalSyncEnabled(true);
 
+
+
+
+
+
   Ball ball(Values::BALL_RADIUS, width, height);
   Paddle paddle(width, height);
+
+
+   Music musiqueFond;
+     std::string cheminMusique = "src/musics/bougie.mp3";
+
+  if (musiqueFond.charger(cheminMusique))
+
+  {
+      musiqueFond.jouer(true, 40.f);
+
+
+  }
 
   std::vector<std::unique_ptr<Brick>> bricks =
       BrickFactory::createBricksUnique(width);
