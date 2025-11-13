@@ -16,7 +16,7 @@ int main() {
   const float height = 600.f;
 
   sf::RenderWindow window(sf::VideoMode(width, height), "Casse-Brique SFML");
-  window.setFramerateLimit(60);
+  window.setFramerateLimit(120);
   window.setVerticalSyncEnabled(true);
 
   Ball ball(10.f, width, height);
@@ -61,6 +61,33 @@ int main() {
 
     if (!ball.getIsMoving() && newPositionX != previousPositionX) ball.launch();
 
+    // Paddle collision logic with region-based bounce
+    sf::FloatRect paddleBounds = paddle.getGlobalBounds();
+    sf::FloatRect ballBounds = ball.getShape().getGlobalBounds();
+    if (ballBounds.intersects(paddleBounds)) {
+      float paddleX = paddleBounds.left;
+      float paddleWidth = paddleBounds.width;
+      float ballCenterX = ball.getPosition().x + ball.getRadius();
+
+      float leftZone = paddleX + paddleWidth / 3.0f;
+      float rightZone = paddleX + 2.0f * paddleWidth / 3.0f;
+
+      float ballSpeedY = -std::abs(ball.getSpeed().y);
+      float ballSpeedX = std::abs(ball.getSpeed().x);
+      const float minXSpeed = 4.f; // pixels/sec
+
+      if (ballCenterX < leftZone) {
+          // Left third: bounce left with minimum speed
+          ball.setSpeed(-minXSpeed, ballSpeedY);
+      } else if (ballCenterX > rightZone) {
+          // Right third: bounce right with minimum speed
+          ball.setSpeed(minXSpeed, ballSpeedY);
+      } else {
+          // Center: bounce straight up
+          ball.setSpeed(0.f, ballSpeedY);
+      }
+    }
+
     ball.update(paddle.getGlobalBounds());
 
     // window.clear(sf::Color(200, 200, 200));
@@ -71,12 +98,7 @@ int main() {
                                 }),
                  bricks.end());
     if (cleanupClock.getElapsedTime().asSeconds() >= cleanupInterval) {
-      // Ici on pourra mettre avec les vectors, je sais pas quoi
-      // Exemple :
-      // (std::shared_ptr<Brick>& b) { return b->isDestroyed(); }
-
       std::cout << "ça nettoie en principe" << std::endl;
-
       cleanupClock.restart();
     }
 
@@ -86,30 +108,13 @@ int main() {
       if (!brick->isDestroyed()) {
         if (brick->changeState) {
           brick->draw(window);
-          // brick->changeState = false;
         }
         brick->collision(ball);
-        // std::cout << "vector lenght : " << bricks.size() << std::endl;
       }
     }
 
-    // window.clear(sf::Color(0, 98, 255));
     ball.draw(window);
     paddle.draw(window);
-
-    // if (!brick.isDestroyed()) {
-    //   brick.draw(window);
-    //   brick.collision(ball);
-    // }
-    // if (!brick2.isDestroyed()) {
-    //   brick2.draw(window);
-    //   brick2.collision(ball);
-    // }
-    // if (!brick3.isDestroyed()) {
-    //   brick3.draw(window);
-    //   brick3.collision(ball);
-    // }
-
     window.display();
   }
 
