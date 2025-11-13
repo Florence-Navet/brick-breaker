@@ -29,8 +29,9 @@ class Ball {
   bool getIsMoving() const;
   sf::CircleShape& getShape();
   sf::Vector2f getPosition();
-  sf::Vector2f getSpeed();
+  sf::Vector2f& getSpeed();
   void setSpeed(float speedX, float speedY);
+  sf::FloatRect getGlobalBounds() const;
 };
 
 #endif

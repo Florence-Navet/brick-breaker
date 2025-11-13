@@ -59,13 +59,40 @@ void Brick::setColor() {
 }
 
 void Brick::draw(sf::RenderWindow& window) { window.draw(shape); }
+void Brick::draw(sf::RenderTexture& window) { window.draw(shape); }
+
+sf::RectangleShape& Brick::getShape() {
+  return this->shape;
+}
+
+bool Brick::isDestroyed() const { return durability < 0; }
+
+float Brick::getWidth() { return this->brickWidth; }
+float Brick::getHeight() { return this->brickHeight; }
+
+void Brick::setPosition(float posX, float posY) {
+  shape.setPosition(posX, posY);
+}
+
+// void Brick::collision(Ball& ball) {
+//   sf::FloatRect brickBounds = shape.getGlobalBounds();
+//   sf::FloatRect ballBounds = ball.getGlobalBounds();
+//   if (brickBounds.intersects(ballBounds)) {
+//     ball.reverseYSpeed();
+//     durability--;
+//     setColor();
+//     changeState = true;
+//   }
+// }
 
 void Brick::collision(Ball& ball) {
   // sf:CircleShape = ball.getShape();
 
   sf::FloatRect brickBounds = shape.getGlobalBounds();
+  // sf::CircleShape ballBounds = ball.getGlobalBounds();
+
   sf::Vector2f ballPos = ball.getPosition();
-  sf::Vector2f ballSpeed = ball.getSpeed();
+  sf::Vector2f& ballSpeed = ball.getSpeed();
 
   float ballRadius{ball.getRadius()};
   ballPos.x = ballPos.x + ballRadius;
@@ -73,8 +100,10 @@ void Brick::collision(Ball& ball) {
 
   float closestX = std::clamp(ballPos.x, brickBounds.left,
                               brickBounds.left + brickBounds.width);
+
   float closestY = std::clamp(ballPos.y, brickBounds.top,
                               brickBounds.top + brickBounds.height);
+
   // ball en bas à droite du rectangle
   //  ballPos.x = 240, closestX = 200
   //  ballPos.y = 160, closestX = 150
@@ -131,13 +160,4 @@ void Brick::collision(Ball& ball) {
     this->setColor();
     changeState = true;
   }
-}
-
-bool Brick::isDestroyed() const { return durability < 0; }
-
-float Brick::getWidth() { return this->brickWidth; }
-float Brick::getHeight() { return this->brickHeight; }
-
-void Brick::setPosition(float posX, float posY) {
-  shape.setPosition(posX, posY);
 }

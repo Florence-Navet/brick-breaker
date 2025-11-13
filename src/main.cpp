@@ -25,6 +25,17 @@ int main() {
   std::vector<std::unique_ptr<Brick>> bricks =
       BrickFactory::createBricksUnique(width);
 
+  sf::RenderTexture brickLayer;
+  brickLayer.create(width, height);
+  brickLayer.clear(sf::Color::Transparent);
+
+  for (std::unique_ptr<Brick>& brick : bricks) {
+    brick->draw(brickLayer);
+  }
+
+  brickLayer.display();
+  sf::Sprite brickLayerSprite(brickLayer.getTexture());
+
   // float brickPosition[2]{525.f, 25.f};
   // float brickPosition1[2]{10.f, 50.f};
   // float brickPosition2[2]{350.f, 275.f};
@@ -44,9 +55,10 @@ int main() {
   sf::Clock cleanupClock;             // démarre automatiquement
   const float cleanupInterval = 2.f;  // toutes les 2 secondes
 
-  for (std::unique_ptr<Brick>& brick : bricks) {
-    brick->draw(window);
-  }
+  // window.clear(sf::Color(200, 200, 200));
+  // for (std::unique_ptr<Brick>& brick : bricks) {
+  //   brick->draw(window);
+  // }
 
   while (window.isOpen()) {
     sf::Event evenement;
@@ -70,29 +82,44 @@ int main() {
                                   return b->isDestroyed();
                                 }),
                  bricks.end());
-    if (cleanupClock.getElapsedTime().asSeconds() >= cleanupInterval) {
-      // Ici on pourra mettre avec les vectors, je sais pas quoi
-      // Exemple :
-      // (std::shared_ptr<Brick>& b) { return b->isDestroyed(); }
 
-      std::cout << "ça nettoie en principe" << std::endl;
+    // if (cleanupClock.getElapsedTime().asSeconds() >= cleanupInterval) {
+    //   // Ici on pourra mettre avec les vectors, je sais pas quoi
+    //   // Exemple :
+    //   // (std::shared_ptr<Brick>& b) { return b->isDestroyed(); }
 
-      cleanupClock.restart();
-    }
+    //   std::cout << "ça nettoie en principe" << std::endl;
+
+    //   cleanupClock.restart();
+    // }
 
     window.clear(sf::Color(200, 200, 200));
 
+    // for (std::unique_ptr<Brick>& brick : bricks) {
+    //   if (!brick->isDestroyed()) {
+    //     // brick->draw(window);
+    //     brick->collision(ball);
+    //     if (brick->changeState) {
+    //       brick->draw(window);
+    //       brick->changeState = false;
+    //       std::cout << "vector lenght : " << bricks.size() << std::endl;
+    //     }
+    //   }
+    // }
+
     for (std::unique_ptr<Brick>& brick : bricks) {
       if (!brick->isDestroyed()) {
-        if (brick->changeState) {
-          brick->draw(window);
-          // brick->changeState = false;
-        }
         brick->collision(ball);
-        // std::cout << "vector lenght : " << bricks.size() << std::endl;
+        if (brick->changeState) {
+          // Redraw only this brick on the render texture
+          brickLayer.draw(brick->getShape());
+          brickLayer.display();
+          brick->changeState = false;
+        }
       }
     }
 
+    window.draw(brickLayerSprite);
     // window.clear(sf::Color(0, 98, 255));
     ball.draw(window);
     paddle.draw(window);

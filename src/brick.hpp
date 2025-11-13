@@ -25,11 +25,14 @@ class Brick {
   void setColor();
 
   void draw(sf::RenderWindow& window);
-  void collision(Ball& ball);
+  void draw(sf::RenderTexture& window);
   bool isDestroyed() const;
   float getWidth();
   float getHeight();
   void setPosition(float posX, float posY);
+  void collision(Ball& ball);
+
+  sf::RectangleShape& getShape();
 };
 
 #endif

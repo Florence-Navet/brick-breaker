@@ -42,6 +42,7 @@ void Ball::update(const sf::FloatRect& paddleArea) {
     this->reverseYSpeed();
   }
 
+
   if (shape.getGlobalBounds().intersects(paddleArea))
     speed.y = -std::abs(speed.y);
 }
@@ -58,7 +59,7 @@ sf::CircleShape& Ball::getShape() { return this->shape; }
 
 sf::Vector2f Ball::getPosition() { return shape.getPosition(); }
 
-sf::Vector2f Ball::getSpeed() { return this->speed; }
+sf::Vector2f& Ball::getSpeed() { return this->speed; }
 
 void Ball::setSpeed(float speedX, float speedY) {
   this->speed.x = speedX;
@@ -68,3 +69,7 @@ void Ball::setSpeed(float speedX, float speedY) {
 void Ball::reverseYSpeed() { speed.y = -speed.y; }
 
 void Ball::reverseXSpeed() { speed.x = -speed.x; }
+
+sf::FloatRect Ball::getGlobalBounds() const {
+    return shape.getGlobalBounds();
+}
