@@ -7,10 +7,14 @@
 #include "brick.hpp"
 #include "brickFactory.hpp"
 #include "paddle.hpp"
+#include "gameManager.hpp"
+#include "colors.hpp"
 
 int main() {
   const float width = 800.f;
   const float height = 600.f;
+  gameManager game;
+
 
   sf::RenderWindow window(sf::VideoMode(width, height), "Casse-Brique SFML");
   window.setFramerateLimit(60);
@@ -51,9 +55,11 @@ int main() {
     if (!ball.getIsMoving() && newPositionX != previousPositionX) ball.launch();
 
     ball.update(paddle.getGlobalBounds());
+    game.ballInWindow(ball, paddle, window);
 
 
-    window.clear(sf::Color(200, 200, 200));
+    // window.clear(sf::Color(200, 200, 200));
+    window.clear(Colors::background);
 
     bricks.erase(std::remove_if(bricks.begin(), bricks.end(),
                                 [](std::unique_ptr<Brick>& b) {

@@ -14,7 +14,8 @@ add_executable(sfml-test
     src/ball.cpp
     src/paddle.cpp
     src/brick.cpp
-    src/brickFactory.cpp)
+    src/brickFactory.cpp
+    src/gameManager.cpp)
 
 
 add_executable(olivier-test 

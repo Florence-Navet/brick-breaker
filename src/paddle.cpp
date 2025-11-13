@@ -1,12 +1,14 @@
 // Paddle.cpp
 #include "paddle.hpp"
+#include "colors.hpp"
 
 Paddle::Paddle(float width, float height) {
   float paddleWidth = 100.f;
   float paddleHeight = 20.f;
 
   shape.setSize(sf::Vector2f(paddleWidth, paddleHeight));
-  shape.setFillColor(sf::Color::White);
+  // shape.setFillColor(sf::Color::White);
+  shape.setFillColor(Colors::paddle);
   shape.setPosition((width - paddleWidth) / 2.f, height - 50.f);
 
   speed = 8.f;
@@ -27,4 +29,8 @@ void Paddle::draw(sf::RenderWindow& window) { window.draw(shape); }
 
 sf::FloatRect Paddle::getGlobalBounds() const {
   return shape.getGlobalBounds();
+}
+
+sf::RectangleShape& Paddle::getShape() {
+  return this->shape;
 }

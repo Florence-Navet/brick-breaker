@@ -1,13 +1,18 @@
 // Ball.cpp
 #include "ball.hpp"
-
+#include "colors.hpp"
 Ball::Ball(float radius, float width, float height)
     : windowWidth(width), windowHeight(height), isMoving(false) {
   shape.setRadius(radius);
-  shape.setFillColor(sf::Color::Red);
+  // shape.setFillColor(sf::Color::Red);
+  shape.setFillColor(Colors::ball);
   shape.setPosition(width / 2.f, height - 80.f);
   speed = sf::Vector2f(4.f, -4.f);
   // speed = sf::Vector2f(6.f, -6.f);
+}
+
+void Ball::setPosition(float posX, float posY) {
+  shape.setPosition(posX, posY);
 }
 
 void Ball::resetOnPaddle(const sf::Vector2f& paddlePosition,
@@ -42,7 +47,6 @@ void Ball::update(const sf::FloatRect& paddleArea) {
     this->reverseYSpeed();
   }
 
-
   if (shape.getGlobalBounds().intersects(paddleArea))
     speed.y = -std::abs(speed.y);
 }
@@ -54,6 +58,11 @@ sf::Vector2f Ball::getPosition() const { return shape.getPosition(); }
 float Ball::getRadius() const { return shape.getRadius(); }
 
 bool Ball::getIsMoving() const { return isMoving; }
+
+void Ball::setIsMoving(bool newIsMoving)
+{
+  this->isMoving = newIsMoving;
+}
 
 sf::CircleShape& Ball::getShape() { return this->shape; }
 
@@ -70,6 +79,9 @@ void Ball::reverseYSpeed() { speed.y = -speed.y; }
 
 void Ball::reverseXSpeed() { speed.x = -speed.x; }
 
-sf::FloatRect Ball::getGlobalBounds() const {
-    return shape.getGlobalBounds();
+sf::FloatRect Ball::getGlobalBounds() const { return shape.getGlobalBounds(); }
+
+void Ball::stop() {
+  this->speed.x = 0.f;
+  this->speed.y = 0.f;
 }

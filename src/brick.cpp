@@ -1,6 +1,7 @@
 #include "brick.hpp"
 
 #include "ball.hpp"
+#include "colors.hpp"
 
 Brick::Brick() : brickWidth(100.f), brickHeight(35.f) {
   shape.setSize(sf::Vector2f(this->brickWidth, this->brickHeight));
@@ -40,22 +41,22 @@ Brick::Brick(float brickWidth, float brickHeight, float position[],
 void Brick::setColor() {
   switch (durability) {
     case 4:
-      shape.setFillColor(sf::Color::Yellow);
+      shape.setFillColor(Colors::veryHighLife);
       break;
     case 3:
-      shape.setFillColor(sf::Color::Green);
+      shape.setFillColor(Colors::highLife);
       break;
     case 2:
-      shape.setFillColor(sf::Color::Cyan);
+      shape.setFillColor(Colors::middleLife);
       break;
     case 1:
-      shape.setFillColor(sf::Color::Blue);
+      shape.setFillColor(Colors::lowLife);
       break;
     case 0:
-      shape.setFillColor(sf::Color::Magenta);
+      shape.setFillColor(Colors::veryLowLife);
       break;
     case -1:
-      shape.setFillColor(sf::Color(200, 200, 200));
+      shape.setFillColor(Colors::background);
       break;
     default:
       shape.setFillColor(sf::Color::White);
