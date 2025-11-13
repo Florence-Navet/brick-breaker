@@ -1,13 +1,16 @@
 // Ball.cpp
 #include "ball.hpp"
 #include "colors.hpp"
+#include "values.hpp"
+
 Ball::Ball(float radius, float width, float height)
     : windowWidth(width), windowHeight(height), isMoving(false) {
   shape.setRadius(radius);
   // shape.setFillColor(sf::Color::Red);
   shape.setFillColor(Colors::ball);
   shape.setPosition(width / 2.f, height - 80.f);
-  speed = sf::Vector2f(4.f, -4.f);
+  // speed = sf::Vector2f(4.f, -4.f);
+  speed = sf::Vector2f(Values::BALL_SPEED, -Values::BALL_SPEED);
   // speed = sf::Vector2f(6.f, -6.f);
 }
 

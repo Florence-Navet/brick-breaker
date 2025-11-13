@@ -9,10 +9,11 @@
 #include "paddle.hpp"
 #include "gameManager.hpp"
 #include "colors.hpp"
+#include "values.hpp"
 
 int main() {
-  const float width = 800.f;
-  const float height = 600.f;
+  const float width{Values::WINDOW_WIDTH};
+  const float height{Values::WINDOW_HEIGHT};
   gameManager game;
 
 
@@ -20,7 +21,7 @@ int main() {
   window.setFramerateLimit(60);
   window.setVerticalSyncEnabled(true);
 
-  Ball ball(10.f, width, height);
+  Ball ball(Values::BALL_RADIUS, width, height);
   Paddle paddle(width, height);
 
   std::vector<std::unique_ptr<Brick>> bricks =

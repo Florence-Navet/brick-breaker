@@ -2,14 +2,18 @@
 
 #include "ball.hpp"
 #include "colors.hpp"
+#include "values.hpp"
 
-Brick::Brick() : brickWidth(100.f), brickHeight(35.f) {
+Brick::Brick()
+    : brickWidth(Values::BRICK_WIDTH), brickHeight(Values::BRICK_HEIGHT) {
   shape.setSize(sf::Vector2f(this->brickWidth, this->brickHeight));
   this->setColor();
 }
 
 Brick::Brick(int durability)
-    : brickWidth(100.f), brickHeight(35.f), durability(durability) {
+    : brickWidth(Values::BRICK_WIDTH),
+      brickHeight(Values::BRICK_HEIGHT),
+      durability(durability) {
   shape.setSize(sf::Vector2f(this->brickWidth, this->brickHeight));
   this->setColor();
 }
@@ -66,9 +70,7 @@ void Brick::setColor() {
 void Brick::draw(sf::RenderWindow& window) { window.draw(shape); }
 void Brick::draw(sf::RenderTexture& window) { window.draw(shape); }
 
-sf::RectangleShape& Brick::getShape() {
-  return this->shape;
-}
+sf::RectangleShape& Brick::getShape() { return this->shape; }
 
 bool Brick::isDestroyed() const { return durability < 0; }
 
@@ -109,48 +111,10 @@ void Brick::collision(Ball& ball) {
   float closestY = std::clamp(ballPos.y, brickBounds.top,
                               brickBounds.top + brickBounds.height);
 
-  // ball en bas à droite du rectangle
-  //  ballPos.x = 240, closestX = 200
-  //  ballPos.y = 160, closestX = 150
-  //  dx = 240 - 200 = 40
-  //  dy = 160 - 150 = 10
-  //  distanceSquared = 40*40 + 10*10 = 1600 + 100 = 1700
-
-  // ball en haut à droite du rectangle
-  // ballPos.x = 240, closestX = 200
-  // ballPos.y = 90, closestX = 100
-  // dx = 240 - 200 = 40
-  // dy = 90 - 100 = -10
-  // distanceSquared = 40*40 + -10*-10 = 1600 + 100 = 1700
-
-  // ball en haut à gauche du rectangle
-  // ballPos.x = 90, closestX = 100
-  // ballPos.y = 90, closestX = 100
-  // dx = 90 - 100 = -10
-  // dy = 90 - 100 = -10
-  // distanceSquared = -10*-10 + -10*-10 = 100 + 100 = 200
-
-  // ball en bas à gauche du rectangle
-  // ballPos.x = 90, closestX = 100
-  // ballPos.y = 160, closestX = 150
-  // dx = 90 - 100 = -10
-  // dy = 160 - 150 = 10
-  // distanceSquared = -10*-10 + -10*-10 = 100 + 100 = 200
-
-  // ball sur le rectangle (bas guahce)
-  // ballPos.x = 101, closestX = 101
-  // ballPos.y = 149, closestX = 149
-  // dx = 101 - 101 = 0
-  // dy = 149 - 149 = 0
-  // distanceSquared = 0*0 + 0*0 = 0
-
   float dx = ballPos.x - closestX;
   float dy = ballPos.y - closestY;
   float distanceSquared = dx * dx + dy * dy;
 
-  // 1700 < ( 10*10 = 100 )
-  // 200 < ( 100 )
-  // 0 < 100
   if (distanceSquared < (ballRadius * ballRadius)) {
     if (ballPos.x < brickBounds.left ||
         ballPos.x > brickBounds.left + brickBounds.width) {

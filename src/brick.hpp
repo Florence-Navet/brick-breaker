@@ -3,14 +3,16 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <iostream>
-
+#include "values.hpp"
 class Ball;
 
 class Brick {
  private:
   sf::RectangleShape shape;
-  float brickWidth{100.f};
-  float brickHeight{35.f};
+  // float brickWidth{100.f};
+  // float brickHeight{35.f};
+  float brickWidth{Values::BRICK_WIDTH};
+  float brickHeight{Values::BRICK_HEIGHT};
 
  public:
   int durability{1};
