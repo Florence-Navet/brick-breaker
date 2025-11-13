@@ -1,4 +1,5 @@
 // Paddle.cpp
+#include "ball.hpp"
 #include "paddle.hpp"
 
 Paddle::Paddle(float width, float height) {
@@ -27,4 +28,29 @@ void Paddle::draw(sf::RenderWindow& window) { window.draw(shape); }
 
 sf::FloatRect Paddle::getGlobalBounds() const {
   return shape.getGlobalBounds();
+}
+
+void Paddle::handleBallCollision(Ball& ball) {
+  sf::FloatRect paddleBounds = getGlobalBounds();
+  sf::FloatRect ballBounds = ball.getShape().getGlobalBounds();
+  if (ballBounds.intersects(paddleBounds)) {
+    float paddleX = paddleBounds.left;
+    float paddleWidth = paddleBounds.width;
+    float ballCenterX = ball.getPosition().x + ball.getRadius();
+
+    float leftZone = paddleX + paddleWidth / 3.0f;
+    float rightZone = paddleX + 2.0f * paddleWidth / 3.0f;
+
+    float ballSpeedY = -std::abs(ball.getSpeed().y);
+    float ballSpeedX = std::abs(ball.getSpeed().x);
+    const float minXSpeed = 4.f;  // pixels/sec
+
+    if (ballCenterX < leftZone) {
+      ball.setSpeed(-minXSpeed, ballSpeedY);
+    } else if (ballCenterX > rightZone) {
+      ball.setSpeed(minXSpeed, ballSpeedY);
+    } else {
+      ball.setSpeed(0.f, ballSpeedY);
+    }
+  }
 }

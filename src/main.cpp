@@ -62,31 +62,7 @@ int main() {
     if (!ball.getIsMoving() && newPositionX != previousPositionX) ball.launch();
 
     // Paddle collision logic with region-based bounce
-    sf::FloatRect paddleBounds = paddle.getGlobalBounds();
-    sf::FloatRect ballBounds = ball.getShape().getGlobalBounds();
-    if (ballBounds.intersects(paddleBounds)) {
-      float paddleX = paddleBounds.left;
-      float paddleWidth = paddleBounds.width;
-      float ballCenterX = ball.getPosition().x + ball.getRadius();
-
-      float leftZone = paddleX + paddleWidth / 3.0f;
-      float rightZone = paddleX + 2.0f * paddleWidth / 3.0f;
-
-      float ballSpeedY = -std::abs(ball.getSpeed().y);
-      float ballSpeedX = std::abs(ball.getSpeed().x);
-      const float minXSpeed = 4.f; // pixels/sec
-
-      if (ballCenterX < leftZone) {
-          // Left third: bounce left with minimum speed
-          ball.setSpeed(-minXSpeed, ballSpeedY);
-      } else if (ballCenterX > rightZone) {
-          // Right third: bounce right with minimum speed
-          ball.setSpeed(minXSpeed, ballSpeedY);
-      } else {
-          // Center: bounce straight up
-          ball.setSpeed(0.f, ballSpeedY);
-      }
-    }
+    paddle.handleBallCollision(ball);
 
     ball.update(paddle.getGlobalBounds());
 
