@@ -53,6 +53,10 @@ void Brick::setColor() {
       break;
     case 0:
       shape.setFillColor(sf::Color::Magenta);
+      break;
+    case -1:
+      shape.setFillColor(sf::Color(200, 200, 200));
+      break;
     default:
       shape.setFillColor(sf::Color::White);
   }
