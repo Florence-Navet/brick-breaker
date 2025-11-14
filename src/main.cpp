@@ -18,7 +18,7 @@ int main() {
   gameManager game;
 
   sf::RenderWindow window(sf::VideoMode(width, height), "Casse-Brique SFML");
-  window.setFramerateLimit(60);
+  window.setFramerateLimit(120);
   window.setVerticalSyncEnabled(true);
 
   Ball ball(Values::BALL_RADIUS, width, height);
@@ -64,6 +64,9 @@ int main() {
 
     if (!ball.getIsMoving() && newPositionX != previousPositionX) ball.launch();
 
+    // Paddle collision logic with region-based bounce
+    paddle.handleBallCollision(ball);
+
     ball.update(paddle.getGlobalBounds());
     game.ballInWindow(ball, paddle, window);
 
@@ -75,6 +78,12 @@ int main() {
                                   return b->isDestroyed();
                                 }),
                  bricks.end());
+    if (cleanupClock.getElapsedTime().asSeconds() >= cleanupInterval) {
+      std::cout << "ça nettoie en principe" << std::endl;
+      cleanupClock.restart();
+    }
+
+    window.clear(sf::Color(200, 200, 200));
 
     for (std::unique_ptr<Brick>& brick : bricks) {
       if (!brick->isDestroyed()) {
