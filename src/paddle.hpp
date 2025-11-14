@@ -17,6 +17,7 @@ class Paddle {
   void draw(sf::RenderWindow& window);
 
   sf::FloatRect getGlobalBounds() const;
+  sf::RectangleShape& getShape();
 };
 
 #endif

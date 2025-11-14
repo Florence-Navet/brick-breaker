@@ -42,3 +42,9 @@
 
 **/*build
 build/*
+
+**/*.vscode
+.vscode/*
+
+test.cpp
+unique.cpp
