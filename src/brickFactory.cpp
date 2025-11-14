@@ -9,11 +9,11 @@ std::vector<std::unique_ptr<Brick>> BrickFactory::createBricksUnique(
     float windowWidth) {
   std::vector<std::unique_ptr<Brick>> bricks;
 
-  // for (int i = 0; i < 16; ++i) bricks.push_back(std::make_unique<Brick>(1));
-  // for (int i = 0; i < 14; ++i) bricks.push_back(std::make_unique<Brick>(2));
-  // for (int i = 0; i < 10; ++i) bricks.push_back(std::make_unique<Brick>(3));
+  for (int i = 0; i < 16; ++i) bricks.push_back(std::make_unique<Brick>(1));
+  for (int i = 0; i < 14; ++i) bricks.push_back(std::make_unique<Brick>(2));
+  for (int i = 0; i < 10; ++i) bricks.push_back(std::make_unique<Brick>(3));
   // TEST CONDITION FOR WIN AND LOSE:
-  for (int i = 0; i < 1; ++i) bricks.push_back(std::make_unique<Brick>(0));
+  // for (int i = 0; i < 1; ++i) bricks.push_back(std::make_unique<Brick>(0));
 
   // for (int i = 0; i < 6; ++i) bricks.push_back(std::make_unique<Brick>(4));
 
