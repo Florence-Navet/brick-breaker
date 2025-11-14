@@ -6,41 +6,31 @@
 #include "ball.hpp"
 #include "brick.hpp"
 #include "brickFactory.hpp"
-#include "paddle.hpp"
-#include "gameManager.hpp"
 #include "colors.hpp"
-#include "values.hpp"
+#include "gameManager.hpp"
 #include "music.hpp"
-
+#include "paddle.hpp"
+#include "values.hpp"
 
 int main() {
   const float width{Values::WINDOW_WIDTH};
   const float height{Values::WINDOW_HEIGHT};
   gameManager game;
 
-
   sf::RenderWindow window(sf::VideoMode(width, height), "Casse-Brique SFML");
   window.setFramerateLimit(60);
   window.setVerticalSyncEnabled(true);
 
-
-
-
-
-
   Ball ball(Values::BALL_RADIUS, width, height);
   Paddle paddle(width, height);
 
+  Music musiqueFond;
+  std::string cheminMusique = "src/musics/bougie.mp3";
 
-   Music musiqueFond;
-     std::string cheminMusique = "src/musics/bougie.mp3";
-
-  if (musiqueFond.charger(cheminMusique))
+  if (musiqueFond.load(cheminMusique))
 
   {
-      musiqueFond.jouer(true, 40.f);
-
-
+    musiqueFond.play(true, 40.f);
   }
 
   std::vector<std::unique_ptr<Brick>> bricks =
@@ -76,7 +66,6 @@ int main() {
 
     ball.update(paddle.getGlobalBounds());
     game.ballInWindow(ball, paddle, window);
-
 
     // window.clear(sf::Color(200, 200, 200));
     window.clear(Colors::background);

@@ -4,19 +4,17 @@
 #include <SFML/Audio.hpp>
 #include <string>
 
-class Music
-{
-private:
-    sf::Music musique;
+class Music {
+ private:
+  sf::Music musique;
 
+ public:
+  Music() = default;
 
-public:
-    Music() = default;
+  bool load(const std::string& chemin);
+  void play(bool boucle = true, float volume = 50.f);
 
-    bool charger(const std::string& chemin);
-    void jouer(bool boucle = true, float volume = 50.f);
-  
-    bool estEnLecture() const;
+  bool isPlaying() const;
 };
 
 #endif
