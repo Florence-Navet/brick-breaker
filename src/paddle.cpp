@@ -46,7 +46,7 @@ void Paddle::handleBallCollision(Ball& ball) {
 
     float ballSpeedY = -std::abs(ball.getSpeed().y);
     float ballSpeedX = std::abs(ball.getSpeed().x);
-    const float minXSpeed = 4.f;  // pixels/sec
+    const float minXSpeed = Values::BALL_SPEED;  // pixels/sec
 
     if (ballCenterX < leftZone) {
       ball.setSpeed(-minXSpeed, ballSpeedY);

@@ -83,7 +83,7 @@ int main() {
       cleanupClock.restart();
     }
 
-    window.clear(sf::Color(200, 200, 200));
+    window.clear(Colors::background);
 
     for (std::unique_ptr<Brick>& brick : bricks) {
       if (!brick->isDestroyed()) {
