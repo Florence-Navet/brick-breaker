@@ -19,6 +19,7 @@ Paddle::Paddle(float width, float height) {
 }
 
 void Paddle::update() {
+  
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) shape.move(-speed, 0.f);
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) shape.move(speed, 0.f);
 

@@ -58,11 +58,19 @@ int main() {
       if (evenement.type == sf::Event::Closed) window.close();
     }
 
+    // Launch Ball!
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
+        !ball.getIsMoving()) {
+      std::cout << "space pressed " << std::endl;
+      ball.launch();
+    }
+
     float previousPositionX = paddle.getGlobalBounds().left;
     paddle.update();
     float newPositionX = paddle.getGlobalBounds().left;
 
-    if (!ball.getIsMoving() && newPositionX != previousPositionX) ball.launch();
+    // if (!ball.getIsMoving() && newPositionX != previousPositionX)
+    // ball.launch();
 
     // Paddle collision logic with region-based bounce
     paddle.handleBallCollision(ball);
