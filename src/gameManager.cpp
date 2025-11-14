@@ -4,6 +4,8 @@ int gameManager::getLife() { return this->life; }
 
 void gameManager::reduceLife() { --this->life; }
 
+void gameManager::resetLife() { this->life = 3; }
+
 void gameManager::resetBallPosition(Ball& ball, Paddle& paddle) {
   sf::RectangleShape rect = paddle.getShape();
   sf::Vector2f size = rect.getSize();
@@ -26,4 +28,8 @@ void gameManager::ballInWindow(Ball& ball, Paddle& paddle,
     std::cout << "Vie : " << this->life << std::endl;
     // ball.launch();
   }
+}
+
+std::vector<std::unique_ptr<Brick>> gameManager::resetBricks(int width) {
+  return BrickFactory::createBricksUnique(width);
 }

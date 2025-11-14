@@ -17,11 +17,9 @@ add_executable(sfml-test
     src/brick.cpp
     src/brickFactory.cpp
     src/gameManager.cpp
-    src/music.cpp)
-
+    src/utils.cpp)
 
 cmake_minimum_required(VERSION 3.10)
-
 
 target_link_libraries(sfml-test
  sfml-graphics sfml-window sfml-system sfml-audio)

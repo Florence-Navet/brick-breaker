@@ -8,11 +8,18 @@
 #include "brickFactory.hpp"
 #include "colors.hpp"
 #include "gameManager.hpp"
-#include "music.hpp"
+// #include "music.hpp"
 #include "paddle.hpp"
+#include "utils.hpp"
 #include "values.hpp"
 
 int main() {
+  // Create Font
+  sf::Font font;
+  if (!font.loadFromFile("src/assets/fonts/ARIAL.TTF")) {
+    std::cerr << "Failed to load font!" << std::endl;
+    return -1;
+  }
   const float width{Values::WINDOW_WIDTH};
   const float height{Values::WINDOW_HEIGHT};
   gameManager game;
@@ -24,32 +31,65 @@ int main() {
   Ball ball(Values::BALL_RADIUS, width, height);
   Paddle paddle(width, height);
 
-  Music musiqueFond;
-  std::string cheminMusique = "src/musics/bougie.mp3";
+  // Music musiqueFond;
+  // std::string cheminMusique = "src/assets/musics/bougie.mp3";
 
-  if (musiqueFond.load(cheminMusique))
+  // if (musiqueFond.load(cheminMusique))
 
-  {
-    musiqueFond.play(true, 40.f);
-  }
+  // {
+  //   musiqueFond.play(true, 40.f);
+  // }
 
+  // Create Bricks Layer
   std::vector<std::unique_ptr<Brick>> bricks =
       BrickFactory::createBricksUnique(width);
 
-  sf::RenderTexture brickLayer;
-  brickLayer.create(width, height);
-  brickLayer.clear(sf::Color::Transparent);
+  std::unique_ptr<sf::RenderTexture> brickLayer =
+      Utils::createTexture(width, height, sf::Color::Transparent);
 
   for (std::unique_ptr<Brick>& brick : bricks) {
-    brick->draw(brickLayer);
+    brick->draw(*brickLayer);
   }
+  brickLayer->display();
+  sf::Sprite brickLayerSprite(brickLayer->getTexture());
 
-  brickLayer.display();
-  sf::Sprite brickLayerSprite(brickLayer.getTexture());
+  // Create GameOver Layer
+  std::unique_ptr<sf::RenderTexture> gameOverLayer =
+      Utils::createTexture(width, height, sf::Color(0, 0, 0, 128));
 
-  // CLEAN UP
-  sf::Clock cleanupClock;             // démarre automatiquement
-  const float cleanupInterval = 2.f;  // toutes les 2 secondes
+  std::unique_ptr<sf::Text> gameOverText =
+      Utils::createText("Vous avez perdu.", 50, font);
+  gameOverText->setPosition(
+      (width - gameOverText->getLocalBounds().width) / 2.f,
+      (height / 3.f * 1 - (gameOverText->getLocalBounds().height) / 2.f));
+
+  std::unique_ptr<sf::Text> reloadText =
+      Utils::createText("Appuyez sur espace pour relancer", 50, font);
+  reloadText->setPosition(
+      (width - reloadText->getLocalBounds().width) / 2.f,
+      ((gameOverText->getPosition().y + gameOverText->getLocalBounds().height) +
+       (reloadText->getLocalBounds().height) / 2.f));
+
+  gameOverLayer->draw(*gameOverText);
+  gameOverLayer->draw(*reloadText);
+  gameOverLayer->display();
+  sf::Sprite gameOverSprite(gameOverLayer->getTexture());
+  window.draw(gameOverSprite);
+
+  // Create Win Layer 
+  std::unique_ptr<sf::RenderTexture> winLayer =
+      Utils::createTexture(width, height, sf::Color(255, 255, 255, 128));
+  std::unique_ptr<sf::Text> winText =
+      Utils::createText("Vous avez gagné.", 50, font);
+  winText->setPosition(
+      (width - gameOverText->getLocalBounds().width) / 2.f,
+      (height / 3.f * 1 - (gameOverText->getLocalBounds().height) / 2.f));
+
+  winLayer->draw(*winText);
+  winLayer->draw(*reloadText);
+  winLayer->display();
+  sf::Sprite winSprite(winLayer->getTexture());
+  window.draw(winSprite);
 
   while (window.isOpen()) {
     sf::Event evenement;
@@ -58,60 +98,69 @@ int main() {
       if (evenement.type == sf::Event::Closed) window.close();
     }
 
-    // Launch Ball!
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
-        !ball.getIsMoving()) {
-      std::cout << "space pressed " << std::endl;
-      ball.launch();
-    }
+    if (game.getLife() > 0) {
+      // Launch Ball!
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
+          !ball.getIsMoving()) {
+        std::cout << "space pressed " << std::endl;
+        ball.launch();
+      }
 
-    float previousPositionX = paddle.getGlobalBounds().left;
-    paddle.update();
-    float newPositionX = paddle.getGlobalBounds().left;
+      float previousPositionX = paddle.getGlobalBounds().left;
+      paddle.update();
+      float newPositionX = paddle.getGlobalBounds().left;
 
-    // if (!ball.getIsMoving() && newPositionX != previousPositionX)
-    // ball.launch();
+      paddle.handleBallCollision(ball);
 
-    // Paddle collision logic with region-based bounce
-    paddle.handleBallCollision(ball);
+      ball.update(paddle.getGlobalBounds());
+      game.ballInWindow(ball, paddle, window);
+      if (game.getLife() < 0) {
+        std::cout << "on est décédé" << std::endl;
+      }
 
-    ball.update(paddle.getGlobalBounds());
-    game.ballInWindow(ball, paddle, window);
+      window.clear(Colors::background);
 
-    // window.clear(sf::Color(200, 200, 200));
-    window.clear(Colors::background);
+      bricks.erase(std::remove_if(bricks.begin(), bricks.end(),
+                                  [](std::unique_ptr<Brick>& b) {
+                                    return b->isDestroyed();
+                                  }),
+                   bricks.end());
 
-    bricks.erase(std::remove_if(bricks.begin(), bricks.end(),
-                                [](std::unique_ptr<Brick>& b) {
-                                  return b->isDestroyed();
-                                }),
-                 bricks.end());
-    if (cleanupClock.getElapsedTime().asSeconds() >= cleanupInterval) {
-      std::cout << "ça nettoie en principe" << std::endl;
-      cleanupClock.restart();
-    }
-
-    window.clear(Colors::background);
-
-    for (std::unique_ptr<Brick>& brick : bricks) {
-      if (!brick->isDestroyed()) {
-        brick->collision(ball);
-        if (brick->changeState) {
-          // Redraw only this brick on the render texture
-          brickLayer.draw(brick->getShape());
-          brickLayer.display();
-          brick->changeState = false;
-          std::cout << "vector lenght : " << bricks.size() << std::endl;
-          std::cout << "vie de la brick : " << brick->durability << std::endl;
+      for (std::unique_ptr<Brick>& brick : bricks) {
+        if (!brick->isDestroyed()) {
+          brick->collision(ball);
+          if (brick->changeState) {
+            brickLayer->draw(brick->getShape());
+            brickLayer->display();
+            brick->changeState = false;
+          }
         }
       }
     }
-
+    window.clear(Colors::background);
     window.draw(brickLayerSprite);
-    // window.clear(sf::Color(0, 98, 255));
     ball.draw(window);
     paddle.draw(window);
 
+    if (game.getLife() <= 0) {
+      window.draw(gameOverSprite);
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        std::cout << "je revis ?" << std::endl;
+        bricks = game.resetBricks(width);
+        game.resetLife();
+      }
+    }
+
+    if (bricks.size() <= 0) {
+      std::cout << "on a gagné ?" << std::endl;
+      ball.setIsMoving(false);
+      window.draw(winSprite);
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        std::cout << "je revis ?" << std::endl;
+        bricks = game.resetBricks(width);
+        game.resetLife();
+      }
+    }
     window.display();
   }
 
