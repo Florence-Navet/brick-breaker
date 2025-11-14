@@ -4,10 +4,10 @@ std::unique_ptr<sf::Text> Utils::createText(std::string string, int size,
                                             sf::Font& font) {
   std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>();
   text->setFont(font);
-  //   text->setString(string);
-  text->setString(string);
+//   text->setString(string);
   text->setCharacterSize(size);
   text->setFillColor(Colors::veryHighLife);
+  text->setString(sf::String::fromUtf8(string.begin(), string.end()));
   //   text.setPosition((width - text.getLocalBounds().width) / 2.f,
   //                    (height - text.getLocalBounds().height) / 2.f);
 

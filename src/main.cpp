@@ -14,6 +14,7 @@
 #include "values.hpp"
 
 int main() {
+  std::setlocale(LC_ALL, ".utf8");
   // Create Font
   sf::Font font;
   if (!font.loadFromFile("src/assets/fonts/ARIAL.TTF")) {
@@ -31,13 +32,12 @@ int main() {
   Ball ball(Values::BALL_RADIUS, width, height);
   Paddle paddle(width, height);
 
-  // Music musiqueFond;
-  // std::string cheminMusique = "src/assets/musics/bougie.mp3";
+  // Music backgroundMusic;
+  // std::string musicPath = "src/assets/musics/bougie.mp3";
 
-  // if (musiqueFond.load(cheminMusique))
-
+  // if (backgroundMusic.load(musicPath))
   // {
-  //   musiqueFond.play(true, 40.f);
+  //   backgroundMusic.play(true, 40.f);
   // }
 
   // Create Bricks Layer
@@ -76,7 +76,7 @@ int main() {
   sf::Sprite gameOverSprite(gameOverLayer->getTexture());
   window.draw(gameOverSprite);
 
-  // Create Win Layer 
+  // Create Win Layer
   std::unique_ptr<sf::RenderTexture> winLayer =
       Utils::createTexture(width, height, sf::Color(255, 255, 255, 128));
   std::unique_ptr<sf::Text> winText =
@@ -145,18 +145,15 @@ int main() {
     if (game.getLife() <= 0) {
       window.draw(gameOverSprite);
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        std::cout << "je revis ?" << std::endl;
         bricks = game.resetBricks(width);
         game.resetLife();
       }
     }
 
     if (bricks.size() <= 0) {
-      std::cout << "on a gagné ?" << std::endl;
       ball.setIsMoving(false);
       window.draw(winSprite);
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        std::cout << "je revis ?" << std::endl;
         bricks = game.resetBricks(width);
         game.resetLife();
       }
