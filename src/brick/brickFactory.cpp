@@ -1,8 +1,5 @@
 #include "brickFactory.hpp"
 
-#include <algorithm>  // for std::shuffle
-#include <random>
-
 Brick BrickFactory::create(int durability) { return Brick(durability); }
 
 std::vector<std::unique_ptr<Brick>> BrickFactory::createBricksUnique(

@@ -3,7 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <iostream>
-#include "values.hpp"
+
+#include "../assets/colors.hpp"
+#include "../assets/values.hpp"
+#include "../gameObject/ball.hpp"
+
 class Ball;
 
 class Brick {

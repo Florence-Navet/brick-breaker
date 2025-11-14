@@ -4,6 +4,10 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "../assets/colors.hpp"
+#include "../assets/values.hpp"
+#include "ball.hpp"
+
 class Paddle {
  private:
   sf::RectangleShape shape;

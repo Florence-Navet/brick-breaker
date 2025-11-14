@@ -1,8 +1,4 @@
-// Paddle.cpp
-#include "ball.hpp"
 #include "paddle.hpp"
-#include "colors.hpp"
-#include "values.hpp"
 
 Paddle::Paddle(float width, float height) {
   float paddleWidth = Values::PADDLE_WIDTH;

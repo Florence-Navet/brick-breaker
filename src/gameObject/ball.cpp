@@ -1,7 +1,6 @@
 // Ball.cpp
 #include "ball.hpp"
-#include "colors.hpp"
-#include "values.hpp"
+
 
 Ball::Ball(float radius, float width, float height)
     : windowWidth(width), windowHeight(height), isMoving(false) {

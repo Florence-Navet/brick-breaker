@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "brick.hpp"
-#include "colors.hpp"
+#include "brick/brick.hpp"
+#include "assets/colors.hpp"
 
 class Utils {
  public:

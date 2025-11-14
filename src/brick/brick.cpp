@@ -1,8 +1,6 @@
 #include "brick.hpp"
 
-#include "ball.hpp"
-#include "colors.hpp"
-#include "values.hpp"
+
 
 Brick::Brick()
     : brickWidth(Values::BRICK_WIDTH), brickHeight(Values::BRICK_HEIGHT) {

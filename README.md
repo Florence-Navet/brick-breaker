@@ -76,3 +76,39 @@ replace ./build/sfml-test to the name of your executable (cf CMakeLists.txt last
 ```bash
 docker compose exec dev bash -c "rm -rf build/*"
 ```
+
+
+# Project Structure 
+```
+├── 📁 src
+│   ├── 📁 assets
+│   │   └── 📁 fonts
+│   │       └── 📄 ARIAL.TTF
+│   ├── 📁 musics
+│   │   ├── 🎵 boogie.mp3
+│   │   └── 🎵 minecraft.mp3
+│   ├── ⚡ ball.cpp
+│   ├── ⚡ ball.hpp
+│   ├── ⚡ brick.cpp
+│   ├── ⚡ brick.hpp
+│   ├── ⚡ brickFactory.cpp
+│   ├── ⚡ brickFactory.hpp
+│   ├── ⚡ colors.hpp
+│   ├── ⚡ gameManager.cpp
+│   ├── ⚡ gameManager.hpp
+│   ├── ⚡ main.cpp
+│   ├── ⚡ main.hpp
+│   ├── ⚡ music.cpp
+│   ├── ⚡ music.hpp
+│   ├── ⚡ paddle.cpp
+│   ├── ⚡ paddle.hpp
+│   ├── ⚡ utils.cpp
+│   ├── ⚡ utils.hpp
+│   └── ⚡ values.hpp
+├── ⚙️ .gitignore
+├── 📄 CMakeLists.txt
+├── 🐳 Dockerfile
+├── 📝 README.md
+├── 📄 config.xlaunch
+└── ⚙️ docker-compose.yml
+```

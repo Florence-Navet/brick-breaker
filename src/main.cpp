@@ -1,17 +1,5 @@
 #include "main.hpp"
 
-#include <memory>
-#include <vector>
-
-#include "ball.hpp"
-#include "brick.hpp"
-#include "brickFactory.hpp"
-#include "colors.hpp"
-#include "gameManager.hpp"
-#include "music.hpp"
-#include "paddle.hpp"
-#include "utils.hpp"
-#include "values.hpp"
 
 int main() {
   std::setlocale(LC_ALL, ".utf8");
@@ -33,7 +21,7 @@ int main() {
   Paddle paddle(width, height);
 
   // Music backgroundMusic;
-  // std::string musicPath = "src/assets/musics/boogie.mp3";
+  // std::string musicPath = "assets/musics/boogie.mp3";
 
   // if (backgroundMusic.load(musicPath))
   // {

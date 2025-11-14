@@ -4,6 +4,9 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "../assets/colors.hpp"
+#include "../assets/values.hpp"
+
 class Ball {
  private:
   sf::CircleShape shape;

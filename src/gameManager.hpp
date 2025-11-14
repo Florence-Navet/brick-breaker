@@ -4,9 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include "ball.hpp"
-#include "brickFactory.hpp"
-#include "paddle.hpp"
+#include "brick/brickFactory.hpp"
+#include "gameObject/ball.hpp"
+#include "gameObject/paddle.hpp"
 
 class Ball;
 class Paddle;

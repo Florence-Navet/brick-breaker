@@ -9,15 +9,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
 
+
+
 # Add executable from source files
 add_executable(sfml-test 
     src/main.cpp
-    src/ball.cpp
-    src/paddle.cpp
-    src/brick.cpp
-    src/brickFactory.cpp
+    src/gameObject/ball.cpp
+    src/gameObject/paddle.cpp
+    src/brick/brick.cpp
+    src/brick/brickFactory.cpp
     src/gameManager.cpp
-    src/utils.cpp)
+    src/utils.cpp
+    )
+
+target_include_directories(sfml-test PRIVATE ${PROJECT_SOURCE_DIR}/src)
+
 
 cmake_minimum_required(VERSION 3.10)
 
