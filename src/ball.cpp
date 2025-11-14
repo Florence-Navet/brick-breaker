@@ -1,13 +1,21 @@
 // Ball.cpp
 #include "ball.hpp"
+#include "colors.hpp"
+#include "values.hpp"
 
 Ball::Ball(float radius, float width, float height)
     : windowWidth(width), windowHeight(height), isMoving(false) {
   shape.setRadius(radius);
-  shape.setFillColor(sf::Color::Red);
+  // shape.setFillColor(sf::Color::Red);
+  shape.setFillColor(Colors::ball);
   shape.setPosition(width / 2.f, height - 80.f);
-  speed = sf::Vector2f(4.f, -4.f);
+  // speed = sf::Vector2f(4.f, -4.f);
+  speed = sf::Vector2f(Values::BALL_SPEED, -Values::BALL_SPEED);
   // speed = sf::Vector2f(6.f, -6.f);
+}
+
+void Ball::setPosition(float posX, float posY) {
+  shape.setPosition(posX, posY);
 }
 
 void Ball::resetOnPaddle(const sf::Vector2f& paddlePosition,
@@ -54,11 +62,16 @@ float Ball::getRadius() const { return shape.getRadius(); }
 
 bool Ball::getIsMoving() const { return isMoving; }
 
+void Ball::setIsMoving(bool newIsMoving)
+{
+  this->isMoving = newIsMoving;
+}
+
 sf::CircleShape& Ball::getShape() { return this->shape; }
 
 sf::Vector2f Ball::getPosition() { return shape.getPosition(); }
 
-sf::Vector2f Ball::getSpeed() { return this->speed; }
+sf::Vector2f& Ball::getSpeed() { return this->speed; }
 
 void Ball::setSpeed(float speedX, float speedY) {
   this->speed.x = speedX;
@@ -68,3 +81,10 @@ void Ball::setSpeed(float speedX, float speedY) {
 void Ball::reverseYSpeed() { speed.y = -speed.y; }
 
 void Ball::reverseXSpeed() { speed.x = -speed.x; }
+
+sf::FloatRect Ball::getGlobalBounds() const { return shape.getGlobalBounds(); }
+
+void Ball::stop() {
+  this->speed.x = 0.f;
+  this->speed.y = 0.f;
+}

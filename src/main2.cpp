@@ -9,6 +9,7 @@
 #include <chrono>
 #include <iostream>
 
+
 int main() {
   std::cout << "[INFO] Starting programm...\n";
 
@@ -16,6 +17,7 @@ int main() {
 
   unsigned int screenWidth = 900;
   unsigned int screenHeight = 600;
+  
 
   sf::RenderWindow window;
   // window.create(sf::VideoMode(sf::Vector2u{screenWidth, screenHeight}),

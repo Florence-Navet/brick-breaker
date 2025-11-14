@@ -6,7 +6,7 @@ services:
     # Mount project files into the container
     volumes:
       - type: bind
-        source : ./CMakeLists.txt
+        source: ./CMakeLists.txt
         target: /app/CMakeLists.txt
       - type: bind
         source: ./build/

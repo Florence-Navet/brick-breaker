@@ -1,6 +1,3 @@
-// main.cpp
-// #include <array>
-
 #include "main.hpp"
 
 #include <memory>
@@ -9,44 +6,50 @@
 #include "ball.hpp"
 #include "brick.hpp"
 #include "brickFactory.hpp"
+#include "colors.hpp"
+#include "gameManager.hpp"
+#include "music.hpp"
 #include "paddle.hpp"
+#include "values.hpp"
 
 int main() {
-  const float width = 800.f;
-  const float height = 600.f;
+  const float width{Values::WINDOW_WIDTH};
+  const float height{Values::WINDOW_HEIGHT};
+  gameManager game;
 
   sf::RenderWindow window(sf::VideoMode(width, height), "Casse-Brique SFML");
   window.setFramerateLimit(120);
   window.setVerticalSyncEnabled(true);
 
-  Ball ball(10.f, width, height);
+  Ball ball(Values::BALL_RADIUS, width, height);
   Paddle paddle(width, height);
+
+  Music musiqueFond;
+  std::string cheminMusique = "src/musics/bougie.mp3";
+
+  if (musiqueFond.load(cheminMusique))
+
+  {
+    musiqueFond.play(true, 40.f);
+  }
 
   std::vector<std::unique_ptr<Brick>> bricks =
       BrickFactory::createBricksUnique(width);
 
-  // float brickPosition[2]{525.f, 25.f};
-  // float brickPosition1[2]{10.f, 50.f};
-  // float brickPosition2[2]{350.f, 275.f};
+  sf::RenderTexture brickLayer;
+  brickLayer.create(width, height);
+  brickLayer.clear(sf::Color::Transparent);
 
-  // Brick brick(100.f, 35.f, brickPosition, 3);
-  // Brick brick2(100.f, 35.f, brickPosition1, 4);
-  // Brick brick3(100.f, 35.f, brickPosition2, 2);
+  for (std::unique_ptr<Brick>& brick : bricks) {
+    brick->draw(brickLayer);
+  }
 
-  // Brick brick(3);
-  // brick.setPosition(525.f, 25.f);
-  // Brick brick2(4);
-  // brick2.setPosition(10.f, 50.f);
-  // Brick brick3(2);
-  // brick3.setPosition(350.f, 275.f);
+  brickLayer.display();
+  sf::Sprite brickLayerSprite(brickLayer.getTexture());
 
   // CLEAN UP
   sf::Clock cleanupClock;             // démarre automatiquement
   const float cleanupInterval = 2.f;  // toutes les 2 secondes
-
-  for (std::unique_ptr<Brick>& brick : bricks) {
-    brick->draw(window);
-  }
 
   while (window.isOpen()) {
     sf::Event evenement;
@@ -65,9 +68,11 @@ int main() {
     paddle.handleBallCollision(ball);
 
     ball.update(paddle.getGlobalBounds());
+    game.ballInWindow(ball, paddle, window);
 
     // window.clear(sf::Color(200, 200, 200));
-    // CLEAN UP
+    window.clear(Colors::background);
+
     bricks.erase(std::remove_if(bricks.begin(), bricks.end(),
                                 [](std::unique_ptr<Brick>& b) {
                                   return b->isDestroyed();
@@ -82,15 +87,23 @@ int main() {
 
     for (std::unique_ptr<Brick>& brick : bricks) {
       if (!brick->isDestroyed()) {
-        if (brick->changeState) {
-          brick->draw(window);
-        }
         brick->collision(ball);
+        if (brick->changeState) {
+          // Redraw only this brick on the render texture
+          brickLayer.draw(brick->getShape());
+          brickLayer.display();
+          brick->changeState = false;
+          std::cout << "vector lenght : " << bricks.size() << std::endl;
+          std::cout << "vie de la brick : " << brick->durability << std::endl;
+        }
       }
     }
 
+    window.draw(brickLayerSprite);
+    // window.clear(sf::Color(0, 98, 255));
     ball.draw(window);
     paddle.draw(window);
+
     window.display();
   }
 

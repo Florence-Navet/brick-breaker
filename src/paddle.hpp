@@ -18,6 +18,7 @@ class Paddle {
   void handleBallCollision(Ball& ball);
 
   sf::FloatRect getGlobalBounds() const;
+  sf::RectangleShape& getShape();
 };
 
 #endif
