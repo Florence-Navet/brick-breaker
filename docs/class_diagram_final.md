@@ -1,60 +1,94 @@
 # Final Class Diagram
 
+
 ```mermaid
 classDiagram
-    class GameManager {
-        - Ball ball
-        - Paddle paddle
-        - BrickFactory brickFactory
-        - void run()
-        - void reset()
+    class gameManager {
+        - int life
+        + int getLife()
+        + void reduceLife()
+        + void resetLife()
+        + void resetBallPosition(Ball& ball, Paddle& paddle)
+        + void ballInWindow(Ball& ball, Paddle& paddle, const sf::RenderWindow& window)
+        + std::vector<std::unique_ptr<Brick>> resetBricks(int width)
     }
     class Ball {
-        - float x
-        - float y
-        - float radius
-        - float speedX
-        - float speedY
-        - void move()
-        - void reset()
+        - sf::CircleShape shape
+        - sf::Vector2f speed
+        - float windowWidth
+        - float windowHeight
+        - bool isMoving
+        + Ball(float radius, float width, float height)
+        + void setPosition(float posX, float posY)
+        + void update(const sf::FloatRect& paddleArea)
+        + void draw(sf::RenderWindow& window)
+        + void reverseYSpeed()
+        + void reverseXSpeed()
+        + sf::Vector2f getPosition() const
+        + float getRadius() const
+        + void launch()
+        + void resetOnPaddle(const sf::Vector2f& paddlePosition, float paddleWidth)
+        + bool getIsMoving() const
+        + void setIsMoving(bool newIsMoving)
+        + sf::CircleShape& getShape()
+        + sf::Vector2f getPosition()
+        + sf::Vector2f& getSpeed()
+        + void setSpeed(float speedX, float speedY)
+        + sf::FloatRect getGlobalBounds() const
+        + void stop()
     }
     class Paddle {
-        - float x
-        - float y
-        - float width
-        - float height
-        - void move()
-        - void reset()
+        - sf::RectangleShape shape
+        - float speed
+        - float windowWidth
+        + Paddle(float width, float height)
+        + void update()
+        + void draw(sf::RenderWindow& window)
+        + void handleBallCollision(Ball& ball)
+        + sf::FloatRect getGlobalBounds() const
+        + sf::RectangleShape& getShape()
     }
     class Brick {
-        - float x
-        - float y
-        - float width
-        - float height
-        - bool destroyed
-        - void hit()
+        - sf::RectangleShape shape
+        - float brickWidth
+        - float brickHeight
+        + int durability
+        + int changeState
+        + Brick()
+        + Brick(int durability)
+        + Brick(float brickWidth, float brickHeight, float position[])
+        + Brick(float brickWidth, float brickHeight, float position[], int durability)
+        + void setColor()
+        + void draw(sf::RenderWindow& window)
+        + void draw(sf::RenderTexture& window)
+        + bool isDestroyed() const
+        + float getWidth()
+        + float getHeight()
+        + void setPosition(float posX, float posY)
+        + void collision(Ball& ball)
+        + sf::RectangleShape& getShape()
     }
     class BrickFactory {
-        - std::vector<Brick> bricks
-        - void createBricks()
-        - void resetBricks()
+        + static Brick create(int durability)
+        + static std::vector<std::unique_ptr<Brick>> createBricksUnique(float windowWidth)
     }
     class Utils {
-        + static int randomInt(int min, int max)
-        + static float clamp(float value, float min, float max)
+        + static std::unique_ptr<sf::Text> createText(std::string string, int size, sf::Font& font)
+        + static std::unique_ptr<sf::RenderTexture> createTexture(int width, int height, sf::Color color)
     }
     class Music {
-        - void play()
-        - void stop()
+        - sf::Music musique
+        + Music() = default
+        + bool load(const std::string& chemin)
+        + void play(bool boucle = true, float volume = 50.f)
+        + bool isPlaying() const
     }
-    GameManager --> Ball
-    GameManager --> Paddle
-    GameManager --> BrickFactory
+
+    gameManager --> Ball
+    gameManager --> Paddle
+    gameManager --> BrickFactory
     BrickFactory --> Brick
     Ball --> Utils
-    Paddle --> Utils
-    Brick --> Utils
-    GameManager --> Music
+    Paddle --> Ball
+    Brick --> Ball
 ```
-
-This diagram summarizes the main classes and their relationships based on the project source files. Associations and key methods/fields are included for clarity.
