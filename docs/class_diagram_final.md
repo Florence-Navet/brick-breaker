@@ -2,7 +2,7 @@
 
 
 ```mermaid
-%%{init:{'theme':'forest'}}%%
+%%{init:{'theme':'dark'}}%%
 classDiagram
     class gameManager {
         - int life
