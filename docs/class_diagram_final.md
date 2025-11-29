@@ -1,7 +1,8 @@
-# Final Class Diagram
+# Brick Breaker Class Diagram
 
 
 ```mermaid
+%%{init:{'theme':'forest'}}%%
 classDiagram
     class gameManager {
         - int life
