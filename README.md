@@ -3,7 +3,7 @@
 ![BrickBreaker](breakbreaker.jpg)
 
 **Second year IT Bachelor group project** 📌  
-create a brick breaker game with **C+ and SMFL and Docker**
+create a brick breaker game with **C++ and SMFL and Docker**
 
 ---
 
