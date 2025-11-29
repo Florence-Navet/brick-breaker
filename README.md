@@ -27,7 +27,6 @@ create a brick breaker game with **C++ and SMFL and Docker**
 
 ## Conception : classes' diagram
 ```mermaid
-%%{init:{'theme':'dark'}}%%
 classDiagram
     class gameManager {
         - int life
