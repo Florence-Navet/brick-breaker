@@ -1,6 +1,6 @@
 # BRICK-BREAKER
 
-![BrickBreaker](breakbreaker.jpg)
+![BrickBreaker](img/breakbreaker.jpg)
 
 **Second year IT Bachelor group project** 📌  
 create a brick breaker game with **C++ and SMFL and Docker**
